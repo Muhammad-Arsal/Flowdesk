@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Named "tenant" so only tenant routes use it, not the whole site.
+        $middleware->alias([
+            'tenant' => \App\Http\Middleware\ResolveTenantFromSubdomain::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
